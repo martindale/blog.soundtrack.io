@@ -1,4 +1,4 @@
-var melody = require('./');
+var melody = require('./lib/melody');
 var Remote = require('maki-remote');
 
 var MailPimpTask = new Remote('http://localhost:2525/tasks');
