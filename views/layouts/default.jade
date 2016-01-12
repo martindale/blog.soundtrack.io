@@ -12,6 +12,9 @@ html.no-js
     link(rel="stylesheet", href="/css/semantic.min.css")
     link(rel="stylesheet", href="/css/highlight/maki.css")
     link(rel="stylesheet", href="/css/maki.css")
+    
+    link(rel="stylesheet", href="/css/pen.css")
+    
     link(rel="stylesheet", href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Open+Sans:300italic,400,300,700")
 
     script(src="/js/jquery.js")
@@ -21,6 +24,9 @@ html.no-js
     script(src="/js/highlight.pack.js")
     script(src="/js/uuid.js")
     script(src="/js/jsonrpc.js")
+    
+    script(src="/js/pen.js")
+    script(src="/js/markdown.js")
     
     script(src="/js/maki.js")
 
@@ -75,6 +81,7 @@ html.no-js
               small Built with <a href="http://github.com/martindale/maki">Maki</a>.
 
     script.
+      var editor;
       $(document).on('click', '*[data-intent=edit]', function(e) {
         e.preventDefault();
         
@@ -83,10 +90,18 @@ html.no-js
         $.getJSON('/posts/'+$self.data('id'), function(post) {
           var editFunction = _.debounce(submitEdits, 250);
           
-          var $form = $('<form class="ui form"><div class="field"><textarea rows="20"></textarea></field></form>');
+          /*var $form = $('<form class="ui form" id="inline-editor"><div class="field"><textarea rows="20"></textarea></field></form>');
           $form.find('textarea').val(post.content).on('keyup', editFunction);
 
-          $('*[data-bind='+$self.data('target')+'][data-id='+$self.data('id')+']').replaceWith($form);
+          $('*[data-bind='+$self.data('target')+'][data-id='+$self.data('id')+']').replaceWith($form);*/
+
+          var area = $('div[data-bind=post-description][data-id='+$self.data('id')+']')[0];
+          editor = new Pen({
+            editor: area,
+            debug: true
+          });
+          
+          editor.focus();
           
           function submitEdits() {
             var content = $form.find('textarea').val();
